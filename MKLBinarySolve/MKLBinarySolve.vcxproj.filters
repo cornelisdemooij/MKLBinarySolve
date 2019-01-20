@@ -24,6 +24,9 @@
     <ClInclude Include="PardisoSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="binaryIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
