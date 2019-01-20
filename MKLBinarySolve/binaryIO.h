@@ -9,23 +9,25 @@ using namespace std;
 
 class COOMatrix {
 public:
+    COOMatrix(int nnz) {
+        rows = vector<int>(nnz);
+        cols = vector<int>(nnz);
+        vals = vector<double>(nnz);
+    }
+
     vector<int> rows;
     vector<int> cols;
     vector<double> vals;
 };
 
-COOMatrix getCOOMatrix(string filename) {
-    // Read matrix from file. Matrix must be in COO format, sorted in row-first order.
+COOMatrix readCOOMatrix(string filename) {
+    // Matrix must be in COO format, sorted in row-first order.
     ifstream file;
     file.open(filename, ios::in | ios::binary);
     
     int nnz;
     file.read((char*)&(nnz), sizeof(int));
-
-    COOMatrix matrix = COOMatrix();
-    matrix.rows = vector<int>(nnz);
-    matrix.cols = vector<int>(nnz);
-    matrix.vals = vector<double>(nnz);
+    COOMatrix matrix = COOMatrix(nnz);
     
     int row;
     int col;
@@ -43,14 +45,12 @@ COOMatrix getCOOMatrix(string filename) {
     file.close();
     return matrix;
 }
-vector<double> getVector(string filename) {
-    // Read vector from file.
+vector<double> readVector(string filename) {
     ifstream file;
     file.open(filename, ios::in | ios::binary);
 
     int n;
     file.read((char*)&(n), sizeof(int));
-
     vector<double> v = vector<double>(n);
 
     double val;
@@ -61,4 +61,36 @@ vector<double> getVector(string filename) {
 
     file.close();
     return v;
+}
+
+void writeCOOMatrix(string filename, COOMatrix matrix) {
+    ofstream file;
+    file.open(filename, ios::out | ios::binary);
+
+    int nonzeros = (int)matrix.vals.size();
+    file.write((char*)&nonzeros, sizeof(int));
+
+    for (int i = 0; i < nonzeros; i++) {
+        file.write((char*)&(matrix.rows[i]), sizeof(int));
+        file.write((char*)&(matrix.cols[i]), sizeof(int));
+        file.write((char*)&(matrix.vals[i]), sizeof(double));
+    }
+
+    file.flush();
+    file.close();
+}
+void writeVector(string filename, vector<double> v) {
+    ofstream file;
+    file.open(filename, ios::out | ios::binary);
+
+    int n = (int)v.size();
+    file.write((char*)&(n), sizeof(int));
+
+    for (int row = 0; row < n; row++) {
+        double val = v[row];
+        file.write((char*)&(val), sizeof(double));
+    }
+
+    file.flush();
+    file.close();
 }
