@@ -1,0 +1,32 @@
+Extracts from the Pardiso User Guide version 6.0.0 (https://pardiso-project.org/manual/manual.pdf). Note that the manual counts from 1, not 0, so subtract 1 to convert to C format.
+
+IPARM (4) — Preconditioned CGS. Input
+On entry: This parameter controls preconditioned CGS [16] for nonsymmetric or structural symmetric matrices and Conjugate-Gradients for symmetric matrices.
+
+
+IPARM (8) — Iterative refinement steps. Input
+On entry: On entry to the solve and iterative refinement step, IPARM(8) should be set to the maximum number of iterative refinement steps that the solver will perform. Iterative refinement will stop if a satisfactory level of accuracy of the solution in terms of backward error has been achieved.
+The solver will automatically perform two steps of iterative refinement when perturbed pivots have occured during the numerical factorization and IPARM(8) was equal to zero. The number of iterative refinement steps is reported in IPARM(7).
+Note: If IPARM(8) < 0 the accumulation of the residual is using complex*32 or real*16 in case that the compiler supports it (GNU gfortran does not). Perturbed pivots result in iterative refinement (independent of IPARM(8)=0) and the iteration number executed is reported in IPARM(7).
+The default value is 0.
+
+
+IPARM (11) — Scaling vectors. Input
+On entry: PARDISO can use a maximum weighted matching algorithm to permute large elements close the diagonal and to scale the matrix so that the largest elements are equal to 1 and the absolute value of the off-diagonal entries are less or equal to 1. This scaling method is applied to nonsymmetric matrices (MTYPE=11 or MTYPE=13). The scaling can also be used for symmetric indefinite matrices (MTYPE=-2, MTYPE=-4, or MTYPE=6) if symmetric weighted matchings is applied (IPARM (13)=1 or IPARM (13)=3).
+Note: It is recommended to use IPARM(11)=1 (scaling) and IPARM(13)=1 (matchings) for highly indefinite symmetric matrices e.g. from interior point optimizations or saddle point problems. It is also very important to note that the user must provide in the analysis phase (PHASE=11) the numerical values of the matrix A if IPARM(11)=1 (scaling) or PARM(13)=1 or 2 (matchings). The default value of IPARM(11) is 1 for nonsymmetric matrices (MTYPE=11 or MTYPE=13) and IPARM(11) is 0 for symmetric matrices (MTYPE=-2, MTYPE=-4, or MTYPE=6).
+
+
+IPARM (13) — Improved accuracy using (non-)symmetric weighted matchings. Input
+On entry: PARDISO can use a maximum weighted matching algorithm to permute large elements
+close the diagonal. This strategy adds an additional level of reliability to our factorization methods and can be seen as a complement to the alternative idea of using more extensive pivoting techniques during the numerical factorization.
+Note: It is recommended to use IPARM(11) = 1 (scalings) and IPARM(13)=1 (normal matchings) and IPARM(13)=2 (advanced matchings, higher accuracy) for highly indefinite symmetric matrices e.g. from interior point optimizations or saddle point problems. Note that the user must provide in the analysis phase (PHASE=11) the numerical values of the matrix A in both of these cases. The default value of IPARM(13) is 1 for nonsymmetric matrices (MTYPE=11 or MTYPE=13) and 0 for symmetric matrices (MTYPE=-2, MTYPE=-4, or MTYPE=6).
+
+
+IPARM (29) — Switch between 32-bit and 64-bit factorization. Input
+On entry: The parameter controls the IEEE accuracy of the solver IPARM(29) = 0 indicates that a 64-bit factorization is performed and IPARM(29) = 1 indicates a 32-bit factorization. The default value of IPARM(29) is 0. The option is only available for symmetric indefinite matrices (MTYPE=-2) and for real unsymmetric matrices (MTYPE=11).
+
+
+IPARM (32) — Use the multi-recursive iterative linear solver. Input
+On entry: The default value of IPARM(32) is 0 (sparse direct solver) and IPARM(32)=1 will use the iterative method in PARDISO.
+
+

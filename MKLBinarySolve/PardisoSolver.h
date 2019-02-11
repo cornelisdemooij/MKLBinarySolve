@@ -63,12 +63,12 @@ vector<double> solveWithPardiso(vector<int> ARows, vector<int> ACols, vector<dou
     iparm[4] = 0;       // No user fill-in reducing permutation.
     iparm[5] = 0;       // Write solution into x.
     iparm[6] = 0;       // Not in use.
-    iparm[7] = 2;       // Max numbers of iterative refinement steps.
+    iparm[7] = 4;// 2;       // Max numbers of iterative refinement steps.
     iparm[8] = 0;       // Not in use.
     iparm[9] = 13;      // Perturb the pivot elements with 1E-13.
     iparm[10] = 1;      // Use nonsymmetric permutation and scaling MPS.
     iparm[11] = 0;      // Conjugate/transpose solve.
-    iparm[12] = 1;      // Maximum weighted matching algorithm is switched-on (default for non-symmetric).
+    iparm[12] = 2;// 1;      // Maximum weighted matching algorithm is switched-on (default for non-symmetric).
     iparm[13] = 0;      // Output: Number of perturbed pivots.
     iparm[14] = 0;      // Not in use.
     iparm[15] = 0;      // Not in use.
@@ -82,7 +82,7 @@ vector<double> solveWithPardiso(vector<int> ARows, vector<int> ACols, vector<dou
 
     maxfct = 1;         // Maximum number of numerical factorizations.
     mnum = 1;           // Which factorization to use.
-    msglvl = 1;         // Print statistical information in file.
+    msglvl = 0;// 1;         // Print statistical information in file.
     error = 0;          // Initialize error flag.
     
     // Initialize the internal solver memory pointer. This is only
@@ -101,9 +101,9 @@ vector<double> solveWithPardiso(vector<int> ARows, vector<int> ACols, vector<dou
         printf ("\nERROR during symbolic factorization: %d", error);
         exit (1);
     }
-    printf ("\nReordering completed ... ");
-    printf ("\nNumber of nonzeros in factors = %d", iparm[17]);
-    printf ("\nNumber of factorization MFLOPS = %d", iparm[18]);
+    //printf ("\nReordering completed ... ");
+    //printf ("\nNumber of nonzeros in factors = %d", iparm[17]);
+    //printf ("\nNumber of factorization MFLOPS = %d", iparm[18]);
     
     // Numerical factorization:
     phase = 22;
@@ -114,7 +114,7 @@ vector<double> solveWithPardiso(vector<int> ARows, vector<int> ACols, vector<dou
         printf ("\nERROR during numerical factorization: %d", error);
         exit (2);
     }
-    printf ("\nFactorization completed ... ");
+    //printf ("\nFactorization completed ... ");
     
     // Solution phase:
     phase = 33;
@@ -124,7 +124,7 @@ vector<double> solveWithPardiso(vector<int> ARows, vector<int> ACols, vector<dou
 
     // Transpose solve is used for systems in CSC format
     iparm[11] = 2;      // Transpose solve.
-    printf ("\n\nSolving the system in CSC format...\n");
+    //printf ("\n\nSolving the system in CSC format...\n");
     PARDISO (pt, &maxfct, &mnum, &mtype, &phase,
              &n, a, ia, ja, &idum, &nrhs, 
              iparm, &msglvl, b, x, &error);
@@ -133,11 +133,11 @@ vector<double> solveWithPardiso(vector<int> ARows, vector<int> ACols, vector<dou
         exit (3);
     }
 
-    printf ("\nThe solution of the system is: ");
+    //printf ("\nThe solution of the system is: ");
     for (j = 0; j < n; j++) {
-        printf ("\n x [%d] = % f", j, x[j]);
+        //printf ("\n x [%d] = % f", j, x[j]);
     }
-    printf ("\n");
+    //printf ("\n");
 
     // Termination and release of memory:
     phase = -1;         // Release internal memory.
